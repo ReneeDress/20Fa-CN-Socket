@@ -10,7 +10,7 @@ import os, sys, threading
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import QTextCursor
-from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog
+from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QFileDialog
 from socket import *
 
 class Ui_main(QtWidgets.QMainWindow):
@@ -221,10 +221,18 @@ class Ui_main(QtWidgets.QMainWindow):
         os._exit(0)
 
     def showPicsMenu(self):
-        QtWidgets.QMessageBox.information(self.picsButton, "pics", "pics")
+        # QtWidgets.QMessageBox.information(self.picsButton, "pics", "pics")
+        imgName, imgType = QFileDialog.getOpenFileName(self, "打开图片", "", "*.jpg;;*.png;;All Files(*)")
+        print(imgName, imgType)
 
     def showFileMenu(self):
-        QtWidgets.QMessageBox.information(self.fileButton, "file", "file")
+        # QtWidgets.QMessageBox.information(self.fileButton, "file", "file")
+        fileName, fileType = QFileDialog.getOpenFileName(self, "打开文件", "", "*.txt;;*.md;;All Files(*)") # ;;*.doc;;*.docx
+        fileContent = open(fileName, 'r').read()
+        onlyname = fileName.split('/')[-1]
+        file = '#################### - ' + onlyname + ' - ####################\n' + fileContent + '\n############################ - End - ############################'
+        self.inputMsg.setText(file)
+        print(fileName, fileType)
 
     def __init__(self, serverPort, usrname):
         super(Ui_main, self).__init__()
