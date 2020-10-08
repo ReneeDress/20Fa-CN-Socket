@@ -6,7 +6,7 @@ def intermsg(users, client, username):
     print('User Port: ' + str(client[1]))
     while 1:
         try:
-            receivedMsg = users[client].recv(2048)
+            receivedMsg = users[client].recv(10240)
             now = time.strftime("%Y/%m/%d %H:%M:%S", time.localtime())
             if receivedMsg.decode() != '':
                 print(now + " The Server has received '" + receivedMsg.decode() + "' as " + str(client[1]) + "'s message. ")
@@ -53,7 +53,7 @@ def login(clientsocket, client):
         print(pwdAns.decode())
         usrpwd = [usrAns.decode(), pwdAns.decode()]
         if usrpwd in admin:
-            success = 'Login Success!'
+            success = usrpwd[0] + ' Login Success!'
             clientsocket.send(success.encode())
             users[client] = clientsocket
             if len(users) == 1:

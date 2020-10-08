@@ -9,6 +9,7 @@
 import os, sys, threading
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtGui import QTextCursor
 from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog
 from socket import *
 
@@ -198,6 +199,7 @@ class Ui_main(QtWidgets.QMainWindow):
             yourSentMsg = str(self.inputMsg.text())
             if yourSentMsg != 'exit()':
                 self.clientSocket.send(yourSentMsg.encode())
+                self.inputMsg.setText('')
             else:
                 self.clientSocket.close()
         except ConnectionResetError:
@@ -206,10 +208,13 @@ class Ui_main(QtWidgets.QMainWindow):
     def recvMsg(self):
         while 1:
             try:
-                receivedMsg = self.clientSocket.recv(2048)
+                receivedMsg = self.clientSocket.recv(10240)
                 if receivedMsg.decode() != '':
                     print(receivedMsg.decode())
-                    # self.chatMsg.setText(receivedMsg.decode())
+                    self.chatMsg.append(receivedMsg.decode())
+                    self.chatMsg.moveCursor(-1)
+                if len(receivedMsg.decode()) > 5 and receivedMsg.decode()[-2] == 's' and receivedMsg.decode()[-1] == '!':
+                    self.Name.setText(str(receivedMsg.decode()).split(' ')[0])
             except ConnectionResetError:
                 self.clientSocket.close()
                 break
@@ -235,14 +240,17 @@ class Ui_main(QtWidgets.QMainWindow):
         print(self.clientSocket)
         threads = [threading.Thread(target=self.recvMsg), threading.Thread(target=self.sendMsg)]
         for t in threads:
+            # self.chatMsg.moveToThread(t)
+            # self.inputMsg.moveToThread(t)
             t.start()
         self.show()
 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
+    serverPort = int(sys.argv[1])
     mainWindow = QMainWindow()
-    ui = Ui_main(9124, 'linyijun') # 这里的名字参考生成的py的类名
+    ui = Ui_main(serverPort, 'Your Name') # 这里的名字参考生成的py的类名
     # ui.setupUi(mainWindow, 'ChatRoom')
     # mainWindow.show()
     sys.exit(app.exec_())
