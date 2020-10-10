@@ -13,7 +13,7 @@ from PyQt5.QtGui import QIntValidator
 from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog
 
 class Ui_Login(QtWidgets.QDialog):
-    def setupUi(self, Login):
+    def setupUi(self, Login, serverPort):
         Login.setObjectName("Login")
         Login.resize(276, 300)
         Login.setFixedSize(Login.width(), Login.height())
@@ -76,18 +76,20 @@ class Ui_Login(QtWidgets.QDialog):
         self.port.setGeometry(QtCore.QRect(30, 60, 161, 31))
         self.port.setObjectName("port")
         self.port.setValidator(QIntValidator(8888,65535))
-        self.retranslateUi(Login)
+        self.port.setText(str(serverPort))
+        self.retranslateUi(Login, serverPort)
         self.loginButton.clicked.connect(self.Login)
         QtCore.QMetaObject.connectSlotsByName(Login)
 
-    def retranslateUi(self, Login):
+    def retranslateUi(self, Login, serverPort):
         _translate = QtCore.QCoreApplication.translate
         Login.setWindowTitle(_translate("Login", "Login"))
         self.usr.setPlaceholderText(_translate("Login", "Your UserName"))
         self.pwd.setPlaceholderText(_translate("Login", "Your Password"))
         self.loginButton.setText(_translate("Login", "Login"))
-        self.port.setText(_translate("Login", "9124"))
+        self.port.setText(_translate("Login", str(serverPort)))
         self.port.setPlaceholderText(_translate("Login", "Your ChatRoomID"))
+
 
     def Login(self):
         admin = [['linyijun', 'linyijun'], ['reneedress', 'reneedress']]
@@ -99,11 +101,17 @@ class Ui_Login(QtWidgets.QDialog):
             print('accept')
             # QtWidgets.QMessageBox.information(self.loginButton, "login", "login")
             # print('info done')
-            res = self.accept()
-            print(res)
+            self.accept()
+            # self.close()
         else:
             self.reject()
             # self.setResult(0)
+
+    def __init__(self, port):
+        super(Ui_Login, self).__init__()
+        self.setupUi(self, port)
+        self.retranslateUi(self, port)
+        self.show()
 
     # @QtCore.pyqtSlot()
     # def accept(self):
