@@ -16,6 +16,9 @@ python3 PLUS/pyqt.py [THESAMEPORT]
 ```
 ## Introduction
 实现了一个可爱的本地Socket通信，基于TCP，带GUI。
-![Login](./pics/login.png){:height="50%" width="50%"}
+
+![Login](./pics/login.png)
+
 ![Chat](./pics/chat.png)
+
 Socket文件夹下为命令行版本，含TCP及UDP。

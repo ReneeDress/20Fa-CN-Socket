@@ -243,7 +243,7 @@ class Ui_main(QtWidgets.QMainWindow):
         print(b64pic)
         # b64 = 'data:image/jpg;base64,' + b64pic
         b64 = b64pic
-        html = '<img src=\"' + b64 + '\"></img>'
+        html = '<img src=\"' + b64 + '\" height=200></img>'
         self.inputMsg.setText(html)
 
 
