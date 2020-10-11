@@ -6,6 +6,7 @@ def intermsg(users, client, username):
     print('User Port: ' + str(client[1]))
     while 1:
         try:
+            time.sleep(0.1)
             receivedMsg = users[client].recv(20480)
             now = time.strftime("%Y/%m/%d %H:%M:%S", time.localtime())
             if receivedMsg.decode() != '':
@@ -56,6 +57,7 @@ def login(clientsocket, client):
         if usrpwd in admin:
             success = usrpwd[0] + ' Login Success!'
             clientsocket.send(success.encode())
+            time.sleep(1)
             users[client] = clientsocket
             if len(users) == 1:
                 print(len(users), 'user has connected.')
@@ -65,6 +67,7 @@ def login(clientsocket, client):
         else:
             failed = 'Login Failed!'
             clientsocket.send(failed.encode())
+            time.sleep(1)
     threading.Thread(target=intermsg, args=(users, client, usrAns.decode())).start()
 
 
